@@ -71,7 +71,7 @@ namespace gui {
 			std::string title;
 			std::string content;
 
-			uint64_t CalcHash();
+			uint64_t CalcHash() const;
 		};
 
 		void SetNotificationIconAndTitle(NotificationDetails* content, FLAG_NOTIF type);

@@ -49,7 +49,11 @@ public:
         if (gui::Button("Button"))                              // Buttons return true when clicked (most widgets return true when edited/activated)
             counter++;
         gui::SameLine();
+#ifdef GUI_FEATURE_CPP20_FORMAT
+        gui::Text("counter = {}", counter);
+#else
         gui::Text("counter = %d", counter);
+#endif
 
         {
             // Cycle the color of the framerate text depending on the counter
@@ -181,7 +185,7 @@ public:
         {
             gui::Button(std::to_string(i), gui::Vec2{ 30, 30 });
             if (gui::PayloadSource payloadSource{ "NUMBER", i })
-                gui::Text("Dragging the number %d", i); // Drawing anything while a PayloadSource object is still alive will instead draw to the cursor tooltip
+                gui::Text("Dragging the number {}", i); // Drawing anything while a PayloadSource object is still alive will instead draw to the cursor tooltip
             if (i < 64)
                 gui::SameLine();
         }
@@ -204,7 +208,7 @@ public:
 void DrawAnotherWindow()
 {
     static AnotherWindow anotherWindow;           // Allocate storage for another window
-    anotherWindow.SetIsOpen(show_another_window); // Show or not show the window accordingly (can also be called by the window class itself)
+    anotherWindow.SetIsOpen(show_another_window); // Show or not show the window accordingly (can also be managed by the window class itself)
     anotherWindow.Draw();                         // Ignores draw call if the internal flag is set to closed
 }
 #else

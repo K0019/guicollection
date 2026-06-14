@@ -1348,9 +1348,8 @@ namespace gui {
 		The identifier of the payload (to identify compatible payloads)
 	\param data
 		The payload data.
-	\param dragLabel
-		The name of the object being dragged. If empty, the tooltip while
-		dragging will be empty without any additional GUI calls to draw to it.
+	\param flags
+		Any special payload behavior flags.
 	*//******************************************************************/
 	template <typename DataType>
 	class PayloadSource : public internal::BeginEndBound_PayloadSource
@@ -1376,6 +1375,8 @@ namespace gui {
 		The identifier of the payload (to identify compatible payloads)
 	\param onReceive
 		The function called when receiving a payload.
+	\param flags
+		Any special payload behavior flags.
 	*//******************************************************************/
 	template <typename DataType, typename FunctionType>
 		requires std::invocable<FunctionType, const DataType&>
@@ -1391,12 +1392,14 @@ namespace gui {
 		The type of the function to be called when receiving a payload.
 	\param payloadIdentifier
 		The identifier of the payload (to identify compatible payloads)
-	\param displayText
-		The text in the middle. If nullptr, no text is drawn.
 	\param size
 		The size of the area.
+	\param displayText
+		The text in the middle. If nullptr, no text is drawn.
 	\param onReceive
 		The function called when receiving a payload.
+	\param flags
+		Any special payload behavior flags.
 	*//******************************************************************/
 	template <typename DataType, typename FunctionType>
 	void PayloadTargetRect(internal::TextType payloadIdentifier, Vec2 size, internal::TextTypeExtra displayText, FunctionType onReceive, FLAG_PAYLOAD_TARGET flags = FLAG_PAYLOAD_TARGET::NONE);

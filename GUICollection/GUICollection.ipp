@@ -99,11 +99,11 @@ namespace gui {
 	template <typename... Args>
 	void TextCentered([[maybe_unused]] internal::TextTypeForFormatting fmt, const Args&... args)
 	{
+#ifndef IMGUI_DISABLE
 		auto CenterCursorPos{ [](const internal::TextTypeForFormatting& text) -> void {
 			ImGui::SetCursorPosX((ImGui::GetWindowWidth() - ImGui::CalcTextSize(text, text.data() + text.size()).x) * 0.5f);
 		} };
 
-#ifndef IMGUI_DISABLE
 		if constexpr (sizeof...(args) == 0)
 		{
 			CenterCursorPos(fmt);
@@ -264,14 +264,17 @@ namespace gui {
 	}
 	template<typename DataType, typename FunctionType>
 		requires std::invocable<FunctionType, const DataType&>
-	void PayloadTarget(internal::TextType identifier, FunctionType onReceive, FLAG_PAYLOAD_TARGET flags)
+	void PayloadTarget([[maybe_unused]] internal::TextType identifier, [[maybe_unused]] FunctionType onReceive, [[maybe_unused]] FLAG_PAYLOAD_TARGET flags)
 	{
+#ifndef IMGUI_DISABLE
 		internal::PayloadTargetClass<DataType, FunctionType>::Invoke(identifier, onReceive, flags);
+#endif
 	}
 
 	template<typename DataType, typename FunctionType>
-	void PayloadTargetRect(internal::TextType payloadIdentifier, Vec2 size, internal::TextTypeExtra displayText, FunctionType onReceive, FLAG_PAYLOAD_TARGET flags)
+	void PayloadTargetRect([[maybe_unused]] internal::TextType payloadIdentifier, [[maybe_unused]] Vec2 size, [[maybe_unused]] internal::TextTypeExtra displayText, [[maybe_unused]] FunctionType onReceive, [[maybe_unused]] FLAG_PAYLOAD_TARGET flags)
 	{
+#ifndef IMGUI_DISABLE
 		Vec2 topLeft{ GetScreenCursorPos() };
 
 		DrawRect(topLeft, topLeft + size, GetStyleColor(gui::FLAG_STYLE_COLOR::FRAME_BG), 5.0f);
@@ -283,13 +286,15 @@ namespace gui {
 			Vec2 textSize{ CalcTextSize(displayText) };
 			DrawText(displayText, topLeft + (size - textSize) * 0.5f, GetStyleColor(gui::FLAG_STYLE_COLOR::TEXT));
 		}
+#endif
 	}
 
 	template<typename ContType>
 		requires util::ConvertibleToCArray<ContType>&& std::is_same_v<typename ContType::value_type, const char*>
-	Combo::Combo(internal::TextType label, const ContType& data, internal::TextType selectedValue, int* outSelectedIndex)
+	Combo::Combo([[maybe_unused]] internal::TextType label, [[maybe_unused]] const ContType& data, [[maybe_unused]] internal::TextType selectedValue, [[maybe_unused]] int* outSelectedIndex)
 		: shouldCallEndCombo{ false }
 	{
+#ifndef IMGUI_DISABLE
 		// Find the index of the selected value.
 		for (int i{}; static_cast<size_t>(i) < std::size(data); ++i)
 			if (std::strcmp(data[i], selectedValue) == 0)
@@ -299,14 +304,17 @@ namespace gui {
 			}
 		// Draw the combo
 		CallCombo(label, std::data(data), std::size(data), outSelectedIndex);
+#endif
 	}
 
 	template<typename ContType>
 		requires util::ConvertibleToCArray<ContType>&& std::is_same_v<typename ContType::value_type, const char*>
-	Combo::Combo(internal::TextType label, const ContType& data, int* selectedIndex)
+	Combo::Combo([[maybe_unused]] internal::TextType label, [[maybe_unused]] const ContType& data, [[maybe_unused]] int* selectedIndex)
 		: shouldCallEndCombo{ false }
 	{
+#ifndef IMGUI_DISABLE
 		CallCombo(label, std::data(data), std::size(data), selectedIndex);
+#endif
 	}
 
 	template<typename ContType>

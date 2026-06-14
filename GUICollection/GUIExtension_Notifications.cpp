@@ -66,7 +66,7 @@ namespace gui {
 
 	namespace internal {
 
-		uint64_t NotificationDetails::CalcHash()
+		uint64_t NotificationDetails::CalcHash() const
 		{
 			return util::CombineHashes(
 				util::Hash(content),
@@ -113,11 +113,9 @@ namespace gui {
 			else // Hold and Fading out
 			{
 				float opacity{ std::min(static_cast<float>(GUI_NOTIFICATION_DURATION - elapsedMs) / GUI_NOTIFICATION_FADEOUT_DURATION, 1.0f) };
-				gui::Vec4 color{ gui::GetStyleColor(gui::FLAG_STYLE_COLOR::TEXT) };
-				color.w *= opacity;
+				gui::Vec4 color{ gui::GetStyleColor(gui::FLAG_STYLE_COLOR::TEXT, 1.0f, opacity) };
 				gui::SetStyleColor textColor{ gui::FLAG_STYLE_COLOR::TEXT, color };
-				color = gui::GetStyleColor(gui::FLAG_STYLE_COLOR::BUTTON);
-				color.w *= opacity;
+				color = gui::GetStyleColor(gui::FLAG_STYLE_COLOR::BUTTON, 1.0f, opacity);
 				gui::SetStyleColor buttonColor{ gui::FLAG_STYLE_COLOR::BUTTON, color };
 				gui::SetNextWindowBackgroundAlpha(opacity);
 
